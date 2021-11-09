@@ -14,17 +14,19 @@ object SbtPomBuild extends AutoPlugin {
   import autoImport._
 
   override val projectSettings: Seq[Setting[_]] = Seq(
-    pomBuildPluginsIgnore := Set("sbt-bloop"),
+    pomBuildPluginsIgnoreNames := Seq("^sbt-bloop$"),
+    pomBuildPluginsIgnoreClasses := Seq(),
     pomBuildPluginsIgnoreDirs := {
       val sep = File.separatorChar
-      Seq(file(props.getOrElse("sbt.boot.directory", props("user.home") ++ s"${sep}.sbt${sep}boot")))
+      Seq(file(props.getOrElse("sbt.boot.directory", props("user.home") ++ s"${sep}.sbt${sep}boot")), baseDirectory.value / "project")
     },
     generateBuildPluginsXml := {
       val extracted = Project.extract(state.value)
       val currentProject = extracted.currentRef
       PomBuildPlugins.buildPluginsXml(
         extracted.currentUnit.unit.plugins, 
-        pomBuildPluginsIgnore.value, 
+        pomBuildPluginsIgnoreNames.value, 
+        pomBuildPluginsIgnoreClasses.value, 
         pomBuildPluginsIgnoreDirs.value,
         streams.value.log
       )
@@ -49,6 +51,7 @@ object SbtPomBuild extends AutoPlugin {
 
 object SbtPomBuildKeys {
   val generateBuildPluginsXml = taskKey[NodeSeq]("The pom xml for the build section.")
-  val pomBuildPluginsIgnore = settingKey[Set[String]]("Remove any build plugins containing these names.")
+  val pomBuildPluginsIgnoreNames = settingKey[Seq[String]]("Remove any build plugin names that match these patterns.")
+  val pomBuildPluginsIgnoreClasses = settingKey[Seq[String]]("Remove any build plugin class names that match these patterns.")
   val pomBuildPluginsIgnoreDirs = settingKey[Seq[File]]("Remove any build plugins from these directories.")
 }

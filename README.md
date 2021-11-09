@@ -4,13 +4,15 @@ Adds build time plugin dependencies to the pom file build section
 
 # Configuration
 
-* Set `pomBuildPluginsIgnore` to ignore specific plugins by their artifact name. `sbt-bloop` is included there by default.
-* Set `pomBuildPluginsIgnoreDirs` to ignore plugins that exist within certain directories.  By default the sbt boot plugin is included here.
+* Set `pomBuildPluginsIgnoreNames` to ignore specific plugins by their artifact name. `sbt-bloop` is included there by default. Any valid regex works.
+* Set `pomBuildPluginsIgnoreClasses` to ignore specific plugins by their class name. This is an empty set by default.  Any valid regex works.
+* Set `pomBuildPluginsIgnoreDirs` to ignore plugins that exist within certain directories.  By default the sbt boot plugin is included here, as well as the `./project` directory.
 
 ## Example Config:
 ```sbt
 lazy val myProject = project.in("foo").enablePlugins(SbtPomBuild).settings(
-  pomBuildPluginsIgnore ++= Set("sbt-dependency-graph"), // Do not include sbt-dependency-graph in the pom build plugins list
+  pomBuildPluginsIgnoreNames ++= Set("sbt-dependency-graph"), // Do not include sbt-dependency-graph in the pom build plugins list
+  pomBuildPluginsIgnoreClasses ++= Set("^[^.]+$"), // ignore any plugins if its package has no dots (its in the root project).
   pomBuildPluginsIgnoreDirs ++= Seq(file("~/.ivy2/cache/org.my-org/")) // Do not include any ivy dependencies from `org.my-org` in the pom build plugins list
 )
 ```

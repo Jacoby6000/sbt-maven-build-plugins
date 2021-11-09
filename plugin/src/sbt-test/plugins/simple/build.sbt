@@ -13,7 +13,6 @@ lazy val simple = project.in(file("."))
     TaskKey[Unit]("verifyPomBuild") := {
       val pomFile = makePom.value
       val xml = XML.loadFile(pomFile.getCanonicalPath())
-      println(xml)
       val plugins = xml \\ "project" \ "build" \ "plugins" \ "plugin"
 
       if(plugins.length != 1) 
