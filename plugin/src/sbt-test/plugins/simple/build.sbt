@@ -26,7 +26,7 @@ lazy val simple = project.in(file("."))
       val version = (plugin \ "version").text
 
       val identifier = s"$groupId:$artifactId:$version"
-      val expectedIdentifier = "com.jacoby6000.sbt:sbt-pom-build:" + sys.props("plugin.version")
+      val expectedIdentifier = "com.github.jacoby6000:sbt-pom-build:" + sys.props("plugin.version")
 
       if(identifier != expectedIdentifier)
         sys.error(s"Wrong plugin in xml.  Got $identifier, expected $expectedIdentifier")
