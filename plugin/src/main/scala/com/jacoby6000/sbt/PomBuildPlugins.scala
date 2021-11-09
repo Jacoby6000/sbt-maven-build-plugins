@@ -18,7 +18,7 @@ object PomBuildPlugins {
         .filterNot { plugin =>
           ignorePluginClasses.find(plugin.name.matches(_)) match {
             case Some(pattern) => 
-              logger.info(s"Ignoring plugin ${plugin.name} (matches pattern `$pattern`)")
+              logger.debug(s"Ignoring plugin ${plugin.name} (matches pattern `$pattern`)")
               true
             case None => 
               false
@@ -50,7 +50,7 @@ object PomBuildPlugins {
             ignoreDirs.find(d => path.startsWith(d.getCanonicalPath())) match {
               case None => false
               case Some(p) =>
-                logger.info(s"Ignoring plugin jar $path (subdirectory of `$p`)")
+                logger.debug(s"Ignoring plugin jar $path (subdirectory of `$p`)")
                 true
             }
 
@@ -95,12 +95,12 @@ object PomBuildPlugins {
           
           ignorePluginNames.find(artifactId.matches(_)) match {
             case Some(pat) => 
-              logger.info(s"Ignoring plugin $artifactId. (matches pattern `$pat`)")
+              logger.debug(s"Ignoring plugin $artifactId. (matches pattern `$pat`)")
               None
             case None =>
               val groupId = (xml \ "groupId").text
               val version = (xml \ "version").text
-              logger.info(s"Adding plugin to pom $groupId:$artifactId:$version")
+              logger.debug(s"Adding plugin to pom $groupId:$artifactId:$version")
               Some(<plugin><groupId>{groupId}</groupId><artifactId>{artifactId}</artifactId><version>{version}</version></plugin>)
           }
         case IvyPattern() =>
@@ -109,12 +109,12 @@ object PomBuildPlugins {
 
           ignorePluginNames.find(artifactId.matches(_)) match {
             case Some(pat) => 
-              logger.info(s"Ignoring plugin $artifactId. (matches pattern `$pat`)")
+              logger.debug(s"Ignoring plugin $artifactId. (matches pattern `$pat`)")
               None
             case None =>
               val groupId = (xml \ "@organisation").text
               val version = (xml \ "@revision").text
-              logger.info(s"Adding plugin to pom $groupId:$artifactId:$version")
+              logger.debug(s"Adding plugin to pom $groupId:$artifactId:$version")
               Some(<plugin><groupId>{groupId}</groupId><artifactId>{artifactId}</artifactId><version>{version}</version></plugin>)
           }
 
