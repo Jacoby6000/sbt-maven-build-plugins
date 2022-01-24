@@ -1,6 +1,10 @@
 # sbt-pom-build-plugins
 Adds build time plugin dependencies to the pom file build section
 
+# Install
+```sbt
+addSbtPlugin("com.github.jacoby6000" % "sbt-pom-build" % "1.0.2")
+```
 
 # Configuration
 
